@@ -7,7 +7,7 @@ import com.exampler.podplay.service.PodcastResponse
 
 class SerchViewModel(application: Application) : AndroidViewModel(application) {
 
-    var itunesRepo: ItunesRepo? = null
+    var iTunesRepo: ItunesRepo? = null
 
     data class PodcastSummaryViewData(
         var name: String? = "",
@@ -29,7 +29,7 @@ class SerchViewModel(application: Application) : AndroidViewModel(application) {
 
     fun searchPodcasts(term: String, callback: (List<PodcastSummaryViewData>) -> Unit) {
 
-        itunesRepo?.searchByTerm(term) { results ->
+        iTunesRepo?.searchByTerm(term) { results ->
             if (results == null) {
                 callback(emptyList())
             } else {

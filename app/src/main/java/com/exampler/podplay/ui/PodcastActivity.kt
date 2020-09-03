@@ -5,23 +5,33 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
+import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.exampler.podplay.R
+import com.exampler.podplay.adapter.PodcastListAdapter
+import com.exampler.podplay.adapter.PodcastListAdapter.PodcastListAdapterListener
 import com.exampler.podplay.repository.ItunesRepo
 import com.exampler.podplay.service.ItunesService
+import com.exampler.podplay.viewmodel.SerchViewModel
 import kotlinx.android.synthetic.main.activity_podcast.*
 
-class PodcastActivity : AppCompatActivity() {
+class PodcastActivity : AppCompatActivity(), PodcastListAdapterListener {
 
-    private val TAG = javaClass.simpleName
+    private val searchViewModel by viewModels<SerchViewModel>()
+    private lateinit var podcastListAdapter: PodcastListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_podcast)
 
         setupToolbar()
+
+        setupViewModels()
+        updateControls()
 
     }
 
@@ -41,11 +51,11 @@ class PodcastActivity : AppCompatActivity() {
     }
 
     private fun performSearch(term: String) {
-        val itunesService = ItunesService.instance
-        val itunesRepo = ItunesRepo(itunesService)
-
-        itunesRepo.searchByTerm(term) {
-            Log.i(TAG, "Results = $it")
+        showProgressBar()
+        searchViewModel.searchPodcasts(term) { results ->
+            hideProgressBar()
+            toolbar.title = term
+            podcastListAdapter.setSearchData(results)
         }
     }
 
@@ -65,5 +75,36 @@ class PodcastActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         setSupportActionBar(toolbar)
+    }
+
+    private fun setupViewModels() {
+        val service = ItunesService.instance
+        searchViewModel.iTunesRepo = ItunesRepo(service)
+    }
+
+    private fun updateControls() {
+        podcastRecyclerView.setHasFixedSize(true)
+
+        val layoutManager = LinearLayoutManager(this)
+        podcastRecyclerView.layoutManager = layoutManager
+
+        val dividerItemDecoration = DividerItemDecoration(
+            podcastRecyclerView.context, layoutManager.orientation)
+        podcastRecyclerView.addItemDecoration(dividerItemDecoration)
+
+        podcastListAdapter = PodcastListAdapter(null, this, this)
+        podcastRecyclerView.adapter = podcastListAdapter
+    }
+
+    override fun onShowDetails(podcastSummaryViewData: SerchViewModel.PodcastSummaryViewData) {
+
+    }
+
+    private fun showProgressBar() {
+        progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        progressBar.visibility = View.INVISIBLE
     }
 }

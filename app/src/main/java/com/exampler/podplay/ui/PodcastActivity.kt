@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SearchView
 import com.exampler.podplay.R
 import com.exampler.podplay.repository.ItunesRepo
 import com.exampler.podplay.service.ItunesService
+import kotlinx.android.synthetic.main.activity_podcast.*
 
 class PodcastActivity : AppCompatActivity() {
 
@@ -19,6 +20,8 @@ class PodcastActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_podcast)
+
+        setupToolbar()
 
     }
 
@@ -58,5 +61,9 @@ class PodcastActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         handleIntent(intent)
+    }
+
+    private fun setupToolbar() {
+        setSupportActionBar(toolbar)
     }
 }

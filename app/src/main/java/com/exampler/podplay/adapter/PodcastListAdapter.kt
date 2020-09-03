@@ -2,32 +2,33 @@ package com.exampler.podplay.adapter
 
 import android.app.Activity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.exampler.podplay.viewmodel.SerchViewModel
+import com.exampler.podplay.R
+import com.exampler.podplay.viewmodel.SerchViewModel.PodcastSummaryViewData
 import kotlinx.android.synthetic.main.search_item.view.*
 
 class PodcastListAdapter(
-    private var podcastSummaryViewList: List<SerchViewModel.PodcastSummaryViewData>?,
+    private var podcastSummaryViewList: List<PodcastSummaryViewData>?,
     private val podcastListAdapterListener:
             PodcastListAdapterListener,
     private val parentActivity: Activity) :
         RecyclerView.Adapter<PodcastListAdapter.ViewHolder>() {
 
     interface PodcastListAdapterListener {
-        fun onShowDetails(podcastSummaryViewData: SerchViewModel.PodcastSummaryViewData)
+        fun onShowDetails(podcastSummaryViewData: PodcastSummaryViewData)
     }
 
-    inner class ViewHolder(v: View,
-    private val podcastListAdapterListener: PodcastListAdapterListener) :
+    inner class ViewHolder(v: View, private val podcastListAdapterListener: PodcastListAdapterListener) :
             RecyclerView.ViewHolder(v) {
 
-        var podcastSummaryViewData = SerchViewModel.PodcastSummaryViewData? = null
-                val nameTextView: TextView = v.podcastNameTextView
-        val listUpdatedTextView: TextView = v.podcastLastUpdatedTextView
+        var podcastSummaryViewData: PodcastSummaryViewData? = null
+        val nameTextView: TextView = v.podcastNameTextView
+        val lastUpdatedTextView: TextView = v.podcastLastUpdatedTextView
         val podcastImageView: ImageView = v.podcastImage
 
         init {
@@ -39,7 +40,7 @@ class PodcastListAdapter(
         }
     }
 
-    fun setSearchData(podcastSummaryViewData: List<SerchViewModel.PodcastSummaryViewData>) {
+    fun setSearchData(podcastSummaryViewData: List<PodcastSummaryViewData>) {
         podcastSummaryViewList = podcastSummaryViewData
         this.notifyDataSetChanged()
     }

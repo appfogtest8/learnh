@@ -21,6 +21,7 @@ import com.exampler.podplay.repository.PodcastRepo
 import com.exampler.podplay.service.ItunesService
 import com.exampler.podplay.viewmodel.PodcastViewModel
 import com.exampler.podplay.viewmodel.SerchViewModel
+import com.exampler.podplay.viewmodel.SerchViewModel.PodcastSummaryViewData
 import kotlinx.android.synthetic.main.activity_podcast.*
 
 class PodcastActivity : AppCompatActivity(), PodcastListAdapterListener {
@@ -119,7 +120,7 @@ class PodcastActivity : AppCompatActivity(), PodcastListAdapterListener {
         podcastRecyclerView.adapter = podcastListAdapter
     }
 
-    override fun onShowDetails(podcastSummaryViewData: SerchViewModel.PodcastSummaryViewData) {
+    override fun onShowDetails(podcastSummaryViewData: PodcastSummaryViewData) {
 
         val feedUrl = podcastSummaryViewData.feedUrl ?: return
 

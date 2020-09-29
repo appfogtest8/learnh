@@ -2,6 +2,7 @@ package com.exampler.podplay.service
 
 import okhttp3.*
 import java.io.IOException
+import javax.xml.parsers.DocumentBuilderFactory
 
 class RssFeedService : FeedService {
     override fun getFeed(xmlFileURL: String,
@@ -24,7 +25,9 @@ class RssFeedService : FeedService {
 
                 if (response.isSuccessful) {
                     response.body()?.let { responseBody ->
-                        println(responseBody.string());
+                        val dbFactory = DocumentBuilderFactory.newInstance()
+                        val  dBuilder = dbFactory.newDocumentBuilder()
+                        val doc = dBuilder.parse(responseBody.byteStream())
                         return
                     }
                 }
